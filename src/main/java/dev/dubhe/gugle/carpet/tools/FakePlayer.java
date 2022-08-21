@@ -6,6 +6,8 @@ import dev.dubhe.gugle.carpet.GcaExtension;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
+import net.minecraft.network.chat.TextColor;
+import net.minecraft.network.chat.TextComponent;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
@@ -25,7 +27,7 @@ public class FakePlayer {
                 CarpetSettings.language);
 
         public static Component trans(String key, Object... args) {
-            return Component.literal(ComponentTrans.lang.get(key).formatted(args))
+            return new TextComponent(ComponentTrans.lang.get(key).formatted(args))
                     .setStyle(Style.EMPTY.withBold(true).withItalic(false));
         }
     }

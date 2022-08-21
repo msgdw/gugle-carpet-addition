@@ -27,8 +27,7 @@ public class GcaExtension implements CarpetExtension, ModInitializer {
         return new ResourceLocation(MOD_ID, path);
     }
 
-    static
-    {
+    static {
         CarpetServer.manageExtension(new GcaExtension());
     }
 
@@ -40,6 +39,7 @@ public class GcaExtension implements CarpetExtension, ModInitializer {
     @Override
     public Map<String, String> canHasTranslations(String lang) {
         String dataJSON;
+        if (!lang.equals("zh_cn")) lang = "en_us";
         try {
             dataJSON = IOUtils.toString(
                     Objects.requireNonNull(Translations.class.getClassLoader().getResourceAsStream(

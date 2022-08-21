@@ -2,6 +2,7 @@ package dev.dubhe.gugle.carpet.tools.menu;
 
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -34,7 +35,7 @@ public class Button {
     }
 
     public Button(Item onItem, Item offItem, int itemCount) {
-        this(onItem, offItem, itemCount, Component.literal("on"), Component.literal("off"));
+        this(onItem, offItem, itemCount, new  TextComponent("on"), new  TextComponent("off"));
     }
 
     public Button(Item onItem, Item offItem, int itemCount, Component on, Component off) {
