@@ -1,6 +1,6 @@
 package dev.dubhe.gugle.carpet.mixin;
 
-import carpet.patches.EntityPlayerMPFake;
+import net.cjsah.mod.carpet.patches.EntityPlayerMPFake;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;

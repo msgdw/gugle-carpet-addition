@@ -1,6 +1,6 @@
 package dev.dubhe.gugle.carpet;
 
-import carpet.settings.Rule;
+import net.cjsah.mod.carpet.settings.Rule;
 
 public class GcaSetting {
 

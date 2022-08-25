@@ -1,6 +1,6 @@
 package dev.dubhe.gugle.carpet.mixin;
 
-import carpet.patches.EntityPlayerMPFake;
+import net.cjsah.mod.carpet.patches.EntityPlayerMPFake;
 import dev.dubhe.gugle.carpet.GcaExtension;
 import dev.dubhe.gugle.carpet.GcaSetting;
 import net.minecraft.server.level.ServerPlayer;

@@ -1,22 +1,23 @@
 package dev.dubhe.gugle.carpet;
 
-import carpet.CarpetExtension;
-import carpet.CarpetServer;
 import dev.dubhe.gugle.carpet.api.tools.text.ComponentTranslate;
 import dev.dubhe.gugle.carpet.tools.FakePlayerInventoryContainer;
-import net.fabricmc.api.ModInitializer;
+import net.cjsah.mod.carpet.CarpetExtension;
+import net.cjsah.mod.carpet.CarpetServer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
+import net.minecraftforge.fml.common.Mod;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class GcaExtension implements CarpetExtension, ModInitializer {
+@Mod(GcaExtension.MOD_ID)
+public class GcaExtension implements CarpetExtension {
 
-    public static String MOD_ID = "gca";
+    public static final String MOD_ID = "gca";
     public static final Logger LOGGER = LogManager.getLogger(MOD_ID);
     public static ResourceLocation id(String path) {
         return new ResourceLocation(MOD_ID, path);
@@ -45,10 +46,5 @@ public class GcaExtension implements CarpetExtension, ModInitializer {
     @Override
     public Map<String, String> canHasTranslations(String lang) {
         return ComponentTranslate.getTranslations(lang);
-    }
-
-    @Override
-    public void onInitialize() {
-
     }
 }

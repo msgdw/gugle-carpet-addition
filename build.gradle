@@ -1,91 +1,110 @@
+//file:noinspection GroovyAssignabilityCheck
+buildscript {
+    repositories {
+        maven { url 'https://maven.minecraftforge.net' }
+        maven { url 'https://maven.parchmentmc.org' }
+        maven { url 'https://repo.spongepowered.org/repository/maven-public/' }
+        mavenCentral()
+    }
+    dependencies {
+        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
+        classpath 'org.parchmentmc:librarian:1.+'
+        classpath 'org.spongepowered:mixingradle:0.7-SNAPSHOT'
+    }
+}
+
 plugins {
-    id 'fabric-loom' version '0.13-SNAPSHOT'
     id 'maven-publish'
 }
 
-version = project.mod_version
-group = project.maven_group
+apply plugin: 'net.minecraftforge.gradle'
+apply plugin: 'org.parchmentmc.librarian.forgegradle'
+apply plugin: 'org.spongepowered.mixin'
+
+archivesBaseName = mod_name
+group = maven_group
+
+java.toolchain.languageVersion = JavaLanguageVersion.of(17)
+
+//mixin {
+//    add sourceSets.main, "gca.refmap.json"
+//}
 
 repositories {
     maven {
-        name = 'ParchmentMC'
-        url = 'https://maven.parchmentmc.org'
+        url = "https://www.cursemaven.com"
+        content {
+            includeGroup "curse.maven"
+        }
     }
-    maven {
-        url "https://www.cursemaven.com"
-    }
-    mavenCentral()
-}
-
-loom {
-    accessWidenerPath = file("src/main/resources/gca.accesswidener")
 }
 
 dependencies {
-    // To change the versions see the gradle.properties file
-    minecraft "com.mojang:minecraft:${project.minecraft_version}"
-    mappings loom.layered() {
-        officialMojangMappings()
-        parchment("org.parchmentmc.data:parchment-${minecraft_version}:${parchment_version}@zip")
-    }
-    modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
-
-    // fabric-carpet
-    modImplementation("curse.maven:carpet-349239:${project.carpet_core_version}")
+    minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
+    implementation "curse.maven:carpet-547361:${carpet_core_version}"
+    annotationProcessor 'org.spongepowered:mixin:0.8.4:processor'
 }
 
-processResources {
-    inputs.property "version", project.version
-    filteringCharset "UTF-8"
+minecraft {
+    mappings channel: channel, version: channel_version
+    accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
+    runs {
+        client {
+            workingDirectory project.file('run')
+            property 'forge.logging.markers', 'REGISTRIES'
+            property 'forge.logging.console.level', 'debug'
 
-    filesMatching("fabric.mod.json") {
-        expand "version": project.version
+            mods {
+                gca {
+                    source sourceSets.main
+                }
+            }
+        }
+
+        server {
+            workingDirectory project.file('run')
+            property 'forge.logging.markers', 'REGISTRIES'
+            property 'forge.logging.console.level', 'debug'
+
+            mods {
+                gca {
+                    source sourceSets.main
+                }
+            }
+        }
+
+        data {
+            workingDirectory project.file('run')
+            property 'forge.logging.markers', 'REGISTRIES'
+            property 'forge.logging.console.level', 'debug'
+            args '--mod', 'gca', '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
+            mods {
+                gca {
+                    source sourceSets.main
+                }
+            }
+        }
     }
 }
 
-def targetJavaVersion = 17
-tasks.withType(JavaCompile).configureEach {
-    // ensure that the encoding is set to UTF-8, no matter what the system default is
-    // this fixes some edge cases with special characters not displaying correctly
-    // see http://yodaconditions.net/blog/fix-for-java-file-encoding-problems-with-gradle.html
-    // If Javadoc is generated, this must be specified in that task too.
-    it.options.encoding = "UTF-8"
-    if (targetJavaVersion >= 10 || JavaVersion.current().isJava10Compatible()) {
-        it.options.release = targetJavaVersion
-    }
-}
-
-java {
-    def javaVersion = JavaVersion.toVersion(targetJavaVersion)
-    if (JavaVersion.current() < javaVersion) {
-        toolchain.languageVersion = JavaLanguageVersion.of(targetJavaVersion)
-    }
-    archivesBaseName = project.archives_base_name
-    // Loom will automatically attach sourcesJar to a RemapSourcesJar task and to the "build" task
-    // if it is present.
-    // If you remove this line, sources will not be generated.
-    withSourcesJar()
+sourceSets.main.resources {
+    srcDir 'src/generated/resources'
+    exclude 'custom.refmap.json'
 }
 
 jar {
-    from("LICENSE") {
-        rename { "${it}_${project.archivesBaseName}" }
+    manifest {
+        attributes([
+                "Specification-Title": "gca",
+                "Specification-Vendor": "Gugle",
+                "Specification-Version": "1",
+                "Implementation-Title": project.mod_name,
+                "Implementation-Version": project.mod_version,
+                "Implementation-Vendor" :"Gugle",
+                "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
+                "MixinConfigs": "gca.mixins.json"
+        ])
     }
 }
 
-// configure the maven publication
-publishing {
-    publications {
-        mavenJava(MavenPublication) {
-            from components.java
-        }
-    }
-
-    // See https://docs.gradle.org/current/userguide/publishing_maven.html for information on how to set up publishing.
-    repositories {
-        // Add repositories to publish to here.
-        // Notice: This block does NOT have the same function as the block in the top level.
-        // The repositories here will be used for publishing your artifact, not for
-        // retrieving dependencies.
-    }
-}
+jar.finalizedBy('reobfJar')

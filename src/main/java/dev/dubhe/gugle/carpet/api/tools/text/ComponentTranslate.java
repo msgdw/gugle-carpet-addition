@@ -1,13 +1,14 @@
 package dev.dubhe.gugle.carpet.api.tools.text;
 
-import carpet.CarpetSettings;
-import carpet.utils.Translations;
+import net.cjsah.mod.carpet.CarpetSettings;
+import net.cjsah.mod.carpet.utils.Translations;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.TextColor;
+import net.minecraft.network.chat.TextComponent;
 import org.apache.commons.io.IOUtils;
 
 import java.io.IOException;
@@ -31,7 +32,7 @@ public class ComponentTranslate {
         ComponentTranslate componentTranslate = new ComponentTranslate();
         if (componentTranslate.lang != null) {
             try {
-                return Component.literal(
+                return new TextComponent(
                         componentTranslate.lang
                                 .get(key)
                                 .formatted(args)
@@ -40,7 +41,7 @@ public class ComponentTranslate {
                 e.printStackTrace();
             }
         }
-        return Component.literal(key.formatted(args));
+        return new TextComponent(key.formatted(args));
     }
 
     public static Map<String, String> getTranslations(String lang) {

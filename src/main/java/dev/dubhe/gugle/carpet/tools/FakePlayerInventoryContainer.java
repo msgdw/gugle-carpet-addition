@@ -1,9 +1,9 @@
 package dev.dubhe.gugle.carpet.tools;
 
-import carpet.fakes.ServerPlayerEntityInterface;
-import carpet.helpers.EntityPlayerActionPack;
-import carpet.helpers.EntityPlayerActionPack.Action;
-import carpet.helpers.EntityPlayerActionPack.ActionType;
+import net.cjsah.mod.carpet.fakes.ServerPlayerEntityInterface;
+import net.cjsah.mod.carpet.helpers.EntityPlayerActionPack;
+import net.cjsah.mod.carpet.helpers.EntityPlayerActionPack.Action;
+import net.cjsah.mod.carpet.helpers.EntityPlayerActionPack.ActionType;
 import com.google.common.collect.ImmutableList;
 import com.mojang.datafixers.util.Pair;
 import dev.dubhe.gugle.carpet.api.menu.CustomMenu;
@@ -18,6 +18,7 @@ import net.minecraft.network.chat.Style;
 import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -72,12 +73,12 @@ public class FakePlayerInventoryContainer extends CustomMenu {
     }
 
     @Override
-    public ItemStack getItem(int slot) {
+    public @NonNull ItemStack getItem(int slot) {
         Pair<NonNullList<ItemStack>, Integer> pair = getItemSlot(slot);
         if (pair != null) {
             return pair.getFirst().get(pair.getSecond());
         } else {
-            return null;
+            return ItemStack.EMPTY;
         }
     }
 
@@ -113,7 +114,7 @@ public class FakePlayerInventoryContainer extends CustomMenu {
     }
 
     @Override
-    public ItemStack removeItem(int slot, int amount) {
+    public @NonNull ItemStack removeItem(int slot, int amount) {
         Pair<NonNullList<ItemStack>, Integer> pair = getItemSlot(slot);
         NonNullList<ItemStack> list = null;
         if (pair != null) {
@@ -127,7 +128,7 @@ public class FakePlayerInventoryContainer extends CustomMenu {
     }
 
     @Override
-    public ItemStack removeItemNoUpdate(int slot) {
+    public @NonNull ItemStack removeItemNoUpdate(int slot) {
         Pair<NonNullList<ItemStack>, Integer> pair = getItemSlot(slot);
         NonNullList<ItemStack> list = null;
         if (pair != null) {
@@ -143,7 +144,7 @@ public class FakePlayerInventoryContainer extends CustomMenu {
     }
 
     @Override
-    public void setItem(int slot, ItemStack stack) {
+    public void setItem(int slot, @NonNull ItemStack stack) {
         Pair<NonNullList<ItemStack>, Integer> pair = getItemSlot(slot);
         NonNullList<ItemStack> list = null;
         if (pair != null) {
@@ -160,7 +161,7 @@ public class FakePlayerInventoryContainer extends CustomMenu {
     }
 
     @Override
-    public boolean stillValid(Player player) {
+    public boolean stillValid(@NonNull Player player) {
         if (this.player.isRemoved()) {
             return false;
         }
