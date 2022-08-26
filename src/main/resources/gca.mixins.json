@@ -5,10 +5,8 @@
   "compatibilityLevel": "JAVA_8",
   "mixins": [
     "AbstractContainerMenuMixin",
-    "ItemEntityMixin",
-    "ItemStackMixin",
-    "PlayerMixin",
-    "ServerPlayerMixin"
+    "MinecraftServerMixin",
+    "PlayerMixin"
   ],
   "injectors": {
     "defaultRequire": 1
