@@ -6,4 +6,4 @@ pluginManagement {
     }
 }
 
-rootProject.name = 'GugleCarpetAddition'
+rootProject.name = 'gugle-carpet-addition-forge'

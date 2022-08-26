@@ -27,15 +27,6 @@ public class PlayerMixin {
         if (GcaSetting.openFakePlayerInventory && self instanceof ServerPlayer serverPlayer) {
             if (serverPlayer instanceof EntityPlayerMPFake && serverPlayer.isAlive()) {
                 GcaExtension.fakePlayerInventoryContainerMap.get(self).tick();
-            } else {
-                ItemStack carried = serverPlayer.containerMenu.getCarried();
-                if (carried.getTag() != null) {
-                    if (carried.getTag().get("GcaClear") != null) {
-                        if (carried.getTag().getBoolean("GcaClear")) {
-                            carried.setCount(0);
-                        }
-                    }
-                }
             }
         }
     }
