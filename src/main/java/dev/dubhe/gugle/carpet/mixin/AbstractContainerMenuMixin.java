@@ -21,6 +21,7 @@ public class AbstractContainerMenuMixin {
 
     @Inject(method = "doClick", at = @At("HEAD"), cancellable = true)
     private void doClick(int i, int j, ClickType clickType, Player player, CallbackInfoReturnable<ItemStack> cir){
+        if (i < 0) return;
         Slot slot = this.slots.get(i);
         ItemStack itemStack = slot.getItem();
         if (itemStack.getTag() != null) {
