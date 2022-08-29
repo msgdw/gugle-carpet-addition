@@ -16,14 +16,12 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(AbstractContainerMenu.class)
 public class AbstractContainerMenuMixin {
 
-    @Shadow
-    @Final
-    public NonNullList<Slot> slots;
+    AbstractContainerMenu self = (AbstractContainerMenu)(Object)this;
 
     @Inject(method = "doClick", at = @At("HEAD"), cancellable = true)
     private void doClick(int mouseX, int mouseY, ClickType clickType, Player player, CallbackInfo ci) {
         if (mouseX < 0) return;
-        Slot slot = this.slots.get(mouseX);
+        Slot slot = self.getSlot(mouseX);
         ItemStack itemStack = slot.getItem();
         if (itemStack.getTag() != null) {
             if (itemStack.getTag().get("GcaClear") != null) {
