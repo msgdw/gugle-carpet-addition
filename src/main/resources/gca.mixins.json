@@ -5,8 +5,10 @@
   "compatibilityLevel": "JAVA_8",
   "mixins": [
     "AbstractContainerMenuMixin",
+    "FishingHookMixin",
     "MinecraftServerMixin",
-    "PlayerMixin"
+    "PlayerMixin",
+    "ServerLevelMixin"
   ],
   "injectors": {
     "defaultRequire": 1
