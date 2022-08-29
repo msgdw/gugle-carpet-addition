@@ -17,12 +17,12 @@ import java.util.List;
 @Mixin(AbstractContainerMenu.class)
 public class AbstractContainerMenuMixin {
 
-    @Shadow @Final public List<Slot> slots;
+    AbstractContainerMenu self = (AbstractContainerMenu)(Object)this;
 
     @Inject(method = "doClick", at = @At("HEAD"), cancellable = true)
     private void doClick(int i, int j, ClickType clickType, Player player, CallbackInfoReturnable<ItemStack> cir){
         if (i < 0) return;
-        Slot slot = this.slots.get(i);
+        Slot slot = self.getSlot(i);
         ItemStack itemStack = slot.getItem();
         if (itemStack.getTag() != null) {
             if (itemStack.getTag().get("GcaClear") != null) {
