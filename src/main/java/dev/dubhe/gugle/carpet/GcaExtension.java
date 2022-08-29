@@ -3,18 +3,18 @@ package dev.dubhe.gugle.carpet;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.mojang.datafixers.util.Pair;
+import dev.dubhe.gugle.carpet.api.Function;
 import dev.dubhe.gugle.carpet.api.tools.text.ComponentTranslate;
 import dev.dubhe.gugle.carpet.tools.FakePlayerInventoryContainer;
+import dev.dubhe.gugle.carpet.tools.FakePlayerResident;
 import net.cjsah.mod.carpet.CarpetExtension;
 import net.cjsah.mod.carpet.CarpetServer;
 import net.cjsah.mod.carpet.patches.EntityPlayerMPFake;
-import net.minecraft.core.Registry;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.storage.LevelResource;
 import net.minecraftforge.fml.common.Mod;
 import org.apache.logging.log4j.LogManager;
@@ -26,7 +26,9 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Mod(GcaExtension.MOD_ID)
@@ -34,18 +36,21 @@ public class GcaExtension implements CarpetExtension {
 
     public static final String MOD_ID = "gca";
     public static final Logger LOGGER = LogManager.getLogger(MOD_ID);
+
     public static ResourceLocation id(String path) {
         return new ResourceLocation(MOD_ID, path);
     }
+
     public static final HashMap<Player, FakePlayerInventoryContainer> fakePlayerInventoryContainerMap = new HashMap<>();
 
+    public static final List<Pair<Long, Function>> planFunction = new ArrayList<>();
     static {
         CarpetServer.manageExtension(new GcaExtension());
     }
 
     @Override
     public void onPlayerLoggedIn(ServerPlayer player) {
-        GcaExtension.fakePlayerInventoryContainerMap.put(player,new FakePlayerInventoryContainer(player));
+        GcaExtension.fakePlayerInventoryContainerMap.put(player, new FakePlayerInventoryContainer(player));
     }
 
     @Override
@@ -70,24 +75,7 @@ public class GcaExtension implements CarpetExtension {
             fakePlayerInventoryContainerMap.forEach((player, fakePlayerInventoryContainer) -> {
                 if (!(player instanceof EntityPlayerMPFake)) return;
                 String username = player.getName().getString();
-                double pos_x = player.getX();
-                double pos_y = player.getY();
-                double pos_z = player.getZ();
-                double yaw = player.getYRot();
-                double pitch = player.getXRot();
-                String dimension = player.level.dimension().location().getPath();
-                String gamemode = ((ServerPlayer) player).gameMode.getGameModeForPlayer().getName();
-                boolean flying = player.getAbilities().flying;
-                JsonObject fakePlayer = new JsonObject();
-                fakePlayer.addProperty("pos_x", pos_x);
-                fakePlayer.addProperty("pos_y", pos_y);
-                fakePlayer.addProperty("pos_z", pos_z);
-                fakePlayer.addProperty("yaw", yaw);
-                fakePlayer.addProperty("pitch", pitch);
-                fakePlayer.addProperty("dimension", dimension);
-                fakePlayer.addProperty("gamemode", gamemode);
-                fakePlayer.addProperty("flying", flying);
-                fakePlayerList.add(username, fakePlayer);
+                fakePlayerList.add(username, FakePlayerResident.save(player));
             });
             File file = server.getWorldPath(LevelResource.ROOT).resolve("fake_player.gca.json").toFile();
             if (!file.isFile()) {
@@ -118,19 +106,7 @@ public class GcaExtension implements CarpetExtension {
                 e.printStackTrace();
             }
             for (Map.Entry<String, JsonElement> entry : fakePlayerList.entrySet()) {
-                String username = entry.getKey();
-                JsonObject fakePlayer = entry.getValue().getAsJsonObject();
-                double pos_x = fakePlayer.get("pos_x").getAsDouble();
-                double pos_y = fakePlayer.get("pos_y").getAsDouble();
-                double pos_z = fakePlayer.get("pos_z").getAsDouble();
-                double yaw = fakePlayer.get("yaw").getAsDouble();
-                double pitch = fakePlayer.get("pitch").getAsDouble();
-                String dimension = fakePlayer.get("dimension").getAsString();
-                String gamemode = fakePlayer.get("gamemode").getAsString();
-                boolean flying = fakePlayer.get("flying").getAsBoolean();
-                EntityPlayerMPFake.createFake(username, server, pos_x, pos_y, pos_z, yaw, pitch,
-                        ResourceKey.create(Registry.DIMENSION_REGISTRY, new ResourceLocation(dimension)),
-                        GameType.byName(gamemode), flying);
+                FakePlayerResident.load(entry, server);
             }
         }
     }
