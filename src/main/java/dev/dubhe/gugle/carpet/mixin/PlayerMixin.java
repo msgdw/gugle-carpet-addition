@@ -31,7 +31,7 @@ public class PlayerMixin {
         }
     }
 
-    @Inject(method = "interactOn", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;interact(Lnet/minecraft/world/entity/player/Player;Lnet/minecraft/world/InteractionHand;)Lnet/minecraft/world/InteractionResult;"), cancellable = true)
+    @Inject(method = "interactOn", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/player/Player;getItemInHand(Lnet/minecraft/world/InteractionHand;)Lnet/minecraft/world/item/ItemStack;",ordinal = 0), cancellable = true)
     private void interactOn(Entity entityToInteractOn, InteractionHand hand,
             CallbackInfoReturnable<InteractionResult> cir) {
         if (self instanceof ServerPlayer serverPlayer) {
@@ -41,7 +41,7 @@ public class PlayerMixin {
                     provider = new SimpleMenuProvider((i, inventory, p) -> ChestMenu.sixRows(i, inventory,
                             GcaExtension.fakePlayerInventoryContainerMap.get(fakePlayer)), fakePlayer.getDisplayName());
                 }
-                if (GcaSetting.openFakePlayerEnderChest && serverPlayer.isShiftKeyDown()) {
+                if (GcaSetting.openFakePlayerEnderChest && serverPlayer.isSneaking()) {
                     provider = new SimpleMenuProvider(
                             (i, inventory, p) -> ChestMenu.threeRows(i, inventory,
                                     fakePlayer.getEnderChestInventory()),

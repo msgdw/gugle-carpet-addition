@@ -13,7 +13,6 @@
   },
   "license": "MIT",
   "icon": "assets/gca/icon.png",
-  "accessWidener" : "gca.accesswidener",
   "environment": "*",
   "entrypoints": {
     "main": [
@@ -25,7 +24,7 @@
   ],
   "depends": {
     "fabricloader": ">=0.7.4",
-    "minecraft": ">=1.16",
+    "minecraft": ">=1.14",
     "carpet": "*"
   },
   "custom": {

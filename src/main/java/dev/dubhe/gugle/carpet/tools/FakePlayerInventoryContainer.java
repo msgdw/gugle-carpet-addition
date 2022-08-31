@@ -10,8 +10,8 @@ import dev.dubhe.gugle.carpet.api.menu.CustomMenu;
 import dev.dubhe.gugle.carpet.api.menu.control.AutoResetButton;
 import dev.dubhe.gugle.carpet.api.menu.control.Button;
 import dev.dubhe.gugle.carpet.api.menu.control.RadioList;
-import dev.dubhe.gugle.carpet.api.tools.text.Color;
 import dev.dubhe.gugle.carpet.api.tools.text.ComponentTranslate;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
@@ -40,7 +40,7 @@ public class FakePlayerInventoryContainer extends CustomMenu {
         this.ap = ((ServerPlayerEntityInterface) this.player).getActionPack();
         this.compartments = ImmutableList.of(this.items, this.armor, this.offhand, this.buttons);
         this.createButton();
-        this.ap.setSlot(1);
+        this.player.inventory.selected = 0;
     }
 
     @Override
@@ -178,9 +178,9 @@ public class FakePlayerInventoryContainer extends CustomMenu {
         List<Button> hotBarList = new ArrayList<>();
         for (int i = 0; i < 9; i++) {
             Component hotBarComponent = ComponentTranslate.trans(
-                    "gac.hotbar",
-                    Color.WHITE,
-                    Style.EMPTY.withBold(true).withItalic(false),
+                    "Hotbar: %s",
+                    ChatFormatting.WHITE,
+                    new Style().setBold(true).setItalic(false),
                     i + 1
             );
             boolean defaultState = i == 0;
@@ -188,17 +188,17 @@ public class FakePlayerInventoryContainer extends CustomMenu {
                     hotBarComponent,
                     hotBarComponent
             );
-            int finalI = i + 1;
-            button.addTurnOnFunction(() -> ap.setSlot(finalI));
+            int finalI = i;
+            button.addTurnOnFunction(() -> this.player.inventory.selected = finalI);
             this.addButton(i + 9, button);
             hotBarList.add(button);
         }
         this.addButtonList(new RadioList(hotBarList, true));
 
-        Button stopAll = new AutoResetButton("action.stop_all");
-        Button attackInterval14 = new Button(false, "action.attack.interval.14");
-        Button attackContinuous = new Button(false, "action.attack.continuous");
-        Button useContinuous = new Button(false, "action.use.continuous");
+        Button stopAll = new AutoResetButton("Stop all action");
+        Button attackInterval14 = new Button(false, "Attack every 14 gt: %s");
+        Button attackContinuous = new Button(false, "Attack continuous: %s");
+        Button useContinuous = new Button(false, "Use continuous: %s");
 
         stopAll.addTurnOnFunction(() -> {
             attackInterval14.turnOffWithoutFunction();

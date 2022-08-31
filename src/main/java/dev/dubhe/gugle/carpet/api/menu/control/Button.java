@@ -1,8 +1,8 @@
 package dev.dubhe.gugle.carpet.api.menu.control;
 
 import dev.dubhe.gugle.carpet.api.Function;
-import dev.dubhe.gugle.carpet.api.tools.text.Color;
 import dev.dubhe.gugle.carpet.api.tools.text.ComponentTranslate;
+import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
@@ -51,8 +51,8 @@ public class Button {
 
     public Button(boolean defaultState, String key) {
         this(defaultState, Items.BARRIER, Items.STRUCTURE_VOID, 1,
-                ComponentTranslate.trans(key, Color.GREEN, Style.EMPTY.withBold(true).withItalic(false), "on"),
-                ComponentTranslate.trans(key, Color.RED, Style.EMPTY.withBold(true).withItalic(false), "off")
+                ComponentTranslate.trans(key, ChatFormatting.GREEN, new Style().setBold(true).setItalic(false), "on"),
+                ComponentTranslate.trans(key, ChatFormatting.RED, new Style().setBold(true).setItalic(false), "off")
         );
     }
 
@@ -62,8 +62,8 @@ public class Button {
 
     public Button(boolean defaultState, Item onItem, Item offItem, int itemCount) {
         this(defaultState, onItem, offItem, itemCount,
-                ComponentTranslate.trans("on", Color.GREEN, Style.EMPTY.withBold(true).withItalic(false)),
-                ComponentTranslate.trans("off", Color.RED, Style.EMPTY.withBold(true).withItalic(false))
+                ComponentTranslate.trans("on", ChatFormatting.GREEN, new Style().setBold(true).setItalic(false)),
+                ComponentTranslate.trans("off", ChatFormatting.RED, new Style().setBold(true).setItalic(false))
         );
     }
 

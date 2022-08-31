@@ -8,7 +8,6 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.mojang.datafixers.util.Pair;
 import dev.dubhe.gugle.carpet.api.Function;
-import dev.dubhe.gugle.carpet.api.tools.text.ComponentTranslate;
 import dev.dubhe.gugle.carpet.tools.FakePlayerInventoryContainer;
 import dev.dubhe.gugle.carpet.tools.FakePlayerResident;
 import net.fabricmc.api.ModInitializer;
@@ -16,7 +15,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.storage.LevelResource;
+import net.minecraft.world.level.dimension.DimensionType;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -35,9 +34,11 @@ public class GcaExtension implements CarpetExtension, ModInitializer {
 
     public static String MOD_ID = "gca";
     public static final Logger LOGGER = LogManager.getLogger(MOD_ID);
+
     public static ResourceLocation id(String path) {
         return new ResourceLocation(MOD_ID, path);
     }
+
     public static final HashMap<Player, FakePlayerInventoryContainer> fakePlayerInventoryContainerMap = new HashMap<>();
     public static final List<Pair<Long, Function>> planFunction = new ArrayList<>();
 
@@ -47,7 +48,11 @@ public class GcaExtension implements CarpetExtension, ModInitializer {
 
     @Override
     public void onPlayerLoggedIn(ServerPlayer player) {
-        GcaExtension.fakePlayerInventoryContainerMap.put(player,new FakePlayerInventoryContainer(player));
+        GcaExtension.fakePlayerInventoryContainerMap.put(player, new FakePlayerInventoryContainer(player));
+    }
+
+    private static File getFile(MinecraftServer server) {
+        return server.getStorageSource().getFile(server.getLevelIdName(), "fake_player.gca.json");
     }
 
     @Override
@@ -60,40 +65,33 @@ public class GcaExtension implements CarpetExtension, ModInitializer {
         CarpetServer.settingsManager.parseSettingsClass(GcaSetting.class);
     }
 
-    @Override
-    public Map<String, String> canHasTranslations(String lang) {
-        return ComponentTranslate.getTranslations(lang);
-    }
-
-    @Override
-    public void onServerClosed(MinecraftServer server) {
-        if (GcaSetting.fakePlayerResident) {
-            JsonObject fakePlayerList = new JsonObject();
-            fakePlayerInventoryContainerMap.forEach((player, fakePlayerInventoryContainer) -> {
-                if (!(player instanceof EntityPlayerMPFake)) return;
-                String username = player.getName().getString();
-                fakePlayerList.add(username, FakePlayerResident.save(player));
-            });
-            File file = server.getWorldPath(LevelResource.ROOT).resolve("fake_player.gca.json").toFile();
-            if (!file.isFile()) {
-                try {
-                    file.createNewFile();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-            try (BufferedWriter bfw = Files.newBufferedWriter(file.toPath(), StandardCharsets.UTF_8)) {
-                bfw.write(new Gson().toJson(fakePlayerList));
+    public static void onServerClose(MinecraftServer server) {
+        JsonObject fakePlayerList = new JsonObject();
+        fakePlayerInventoryContainerMap.forEach((player, fakePlayerInventoryContainer) -> {
+            if (!(player instanceof EntityPlayerMPFake)) return;
+            String username = player.getName().getString();
+            LOGGER.warn(username);
+            fakePlayerList.add(username, FakePlayerResident.save(player));
+        });
+        File file = getFile(server);
+        if (!file.isFile()) {
+            try {
+                file.createNewFile();
             } catch (IOException e) {
                 e.printStackTrace();
             }
+        }
+        try (BufferedWriter bfw = Files.newBufferedWriter(file.toPath(), StandardCharsets.UTF_8)) {
+            bfw.write(new Gson().toJson(fakePlayerList));
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
     public static void onServerStart(MinecraftServer server) {
         if (GcaSetting.fakePlayerResident) {
             JsonObject fakePlayerList = new JsonObject();
-            File file = server.getWorldPath(LevelResource.ROOT).resolve("fake_player.gca.json").toFile();
+            File file = getFile(server);
             if (!file.isFile()) {
                 return;
             }
@@ -105,6 +103,7 @@ public class GcaExtension implements CarpetExtension, ModInitializer {
             for (Map.Entry<String, JsonElement> entry : fakePlayerList.entrySet()) {
                 FakePlayerResident.load(entry, server);
             }
+            file.delete();
         }
     }
 

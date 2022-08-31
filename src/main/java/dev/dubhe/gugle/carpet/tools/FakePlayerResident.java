@@ -2,27 +2,25 @@ package dev.dubhe.gugle.carpet.tools;
 import carpet.patches.EntityPlayerMPFake;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import net.minecraft.core.Registry;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.GameType;
+import net.minecraft.world.level.dimension.DimensionType;
 
 import java.util.Map;
 
 public class FakePlayerResident {
 
     public static JsonObject save(Player player) {
-        double pos_x = player.getX();
-        double pos_y = player.getY();
-        double pos_z = player.getZ();
+        double pos_x = player.x;
+        double pos_y = player.y;
+        double pos_z = player.z;
         double yaw = player.yRot;
         double pitch = player.xRot;
-        String dimension = player.level.dimension().location().getPath();
+        String dimension = player.level.dimension.getType().toString();
         String gamemode = ((ServerPlayer) player).gameMode.getGameModeForPlayer().getName();
-        boolean flying = player.abilities.flying;
         JsonObject fakePlayer = new JsonObject();
         fakePlayer.addProperty("pos_x", pos_x);
         fakePlayer.addProperty("pos_y", pos_y);
@@ -31,7 +29,6 @@ public class FakePlayerResident {
         fakePlayer.addProperty("pitch", pitch);
         fakePlayer.addProperty("dimension", dimension);
         fakePlayer.addProperty("gamemode", gamemode);
-        fakePlayer.addProperty("flying", flying);
         return fakePlayer;
     }
 
@@ -45,9 +42,8 @@ public class FakePlayerResident {
         double pitch = fakePlayer.get("pitch").getAsDouble();
         String dimension = fakePlayer.get("dimension").getAsString();
         String gamemode = fakePlayer.get("gamemode").getAsString();
-        boolean flying = fakePlayer.get("flying").getAsBoolean();
         EntityPlayerMPFake.createFake(username, server, pos_x, pos_y, pos_z, yaw, pitch,
-                ResourceKey.create(Registry.DIMENSION_REGISTRY, new ResourceLocation(dimension)),
-                GameType.byName(gamemode), flying);
+                DimensionType.getByName(new ResourceLocation(dimension)),
+                GameType.byName(gamemode));
     }
 }

@@ -17,10 +17,10 @@ import java.util.List;
 @Mixin(AbstractContainerMenu.class)
 public class AbstractContainerMenuMixin {
 
-    AbstractContainerMenu self = (AbstractContainerMenu)(Object)this;
+    AbstractContainerMenu self = (AbstractContainerMenu) (Object) this;
 
-    @Inject(method = "doClick", at = @At("HEAD"), cancellable = true)
-    private void doClick(int i, int j, ClickType clickType, Player player, CallbackInfoReturnable<ItemStack> cir){
+    @Inject(method = "clicked", at = @At("HEAD"), cancellable = true)
+    private void doClick(int i, int j, ClickType clickType, Player player, CallbackInfoReturnable<ItemStack> cir) {
         if (i < 0) return;
         Slot slot = self.getSlot(i);
         ItemStack itemStack = slot.getItem();
