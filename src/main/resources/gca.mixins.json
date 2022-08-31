@@ -6,7 +6,7 @@
   "mixins": [
     "AbstractContainerMenuMixin",
     "FishingHookMixin",
-    "MinecraftServerMixin",
+    "ItemStackMixin",
     "PlayerMixin",
     "ServerLevelMixin"
   ],
@@ -15,5 +15,8 @@
   },
   "client": [
     "ServerPlayerMixin"
+  ],
+  "server": [
+    "MinecraftServerMixin"
   ]
 }
