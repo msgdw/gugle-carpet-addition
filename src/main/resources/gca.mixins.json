@@ -7,14 +7,16 @@
     "AbstractContainerMenuMixin",
     "FishingHookMixin",
     "ItemStackMixin",
-    "MinecraftServerMixin",
     "PlayerMixin",
     "ServerLevelMixin"
   ],
-  "injectors": {
-    "defaultRequire": 1
-  },
+  "server": [
+    "MinecraftServerMixin"
+  ],
   "client": [
     "ServerPlayerMixin"
-  ]
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
 }

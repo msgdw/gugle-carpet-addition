@@ -108,6 +108,7 @@ public class GcaExtension implements CarpetExtension {
             for (Map.Entry<String, JsonElement> entry : fakePlayerList.entrySet()) {
                 FakePlayerResident.load(entry, server);
             }
+            file.delete();
         }
     }
 }

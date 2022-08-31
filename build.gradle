@@ -21,8 +21,9 @@ apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'org.parchmentmc.librarian.forgegradle'
 apply plugin: 'org.spongepowered.mixin'
 
-archivesBaseName = mod_name
+archivesBaseName = "gugle-carpet-addition"
 group = maven_group
+version = mod_version + "-forge-1.18"
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
