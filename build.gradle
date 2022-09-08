@@ -6,7 +6,7 @@ plugins {
 sourceCompatibility = JavaVersion.VERSION_1_8
 targetCompatibility = JavaVersion.VERSION_1_8
 
-version = project.mod_version + "-1.14"
+version = project.mod_version + "-1.14&1.15"
 group = project.maven_group
 
 repositories {
