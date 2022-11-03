@@ -5,11 +5,14 @@
   "compatibilityLevel": "JAVA_8",
   "mixins": [
     "AbstractContainerMenuMixin",
+    "AxeItemMixin",
+    "FenceGateBlockMixin",
     "FishingHookMixin",
     "ItemStackMixin",
     "MinecraftServerMixin",
     "PlayerMixin",
-    "ServerLevelMixin"
+    "ServerLevelMixin",
+    "UseOnContextAccessor"
   ],
   "injectors": {
     "defaultRequire": 1
