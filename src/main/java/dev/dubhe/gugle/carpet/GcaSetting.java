@@ -62,4 +62,18 @@ public class GcaSetting {
             category = {GCA, EXPERIMENTAL}
     )
     public static boolean betterWoodStrip = false;
+
+    // 右键告示牌时与之附着的方块产生交互
+    @Rule(
+            desc = "Make the block attached to the sign interact when you right-click it",
+            category = {GCA, EXPERIMENTAL}
+    )
+    public static boolean betterSignInteraction = false;
+
+    // 允许使用名称中包含“笔”的羽毛编辑告示牌
+    @Rule(
+            desc = "Possible to use feather editing sign with \"pen\" in the name",
+            category = {GCA, EXPERIMENTAL}
+    )
+    public static boolean betterSignEditing = false;
 }
