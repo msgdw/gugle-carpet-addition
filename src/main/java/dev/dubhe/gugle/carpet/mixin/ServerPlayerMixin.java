@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @OnlyIn(Dist.CLIENT)
 @Mixin(ServerPlayer.class)
-public class ServerPlayerMixin {
+public abstract class ServerPlayerMixin {
 
     ServerPlayer self = (ServerPlayer) (Object) this;
 

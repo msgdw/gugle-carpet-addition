@@ -18,7 +18,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(Player.class)
-public class PlayerMixin {
+public abstract class PlayerMixin {
 
     Player self = (Player) (Object) this;
 
