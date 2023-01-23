@@ -12,6 +12,7 @@
     "MinecraftServerMixin",
     "PlayerMixin",
     "ServerLevelMixin",
+    "SignBlockMixin",
     "UseOnContextAccessor"
   ],
   "injectors": {
