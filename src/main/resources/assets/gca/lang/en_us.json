@@ -19,6 +19,9 @@
   "carpet.rule.fakePlayerAutoFish.name": "Fake Player Auto Fish",
   "carpet.rule.fakePlayerAutoFish.desc": "Make fake player to auto fish",
 
+  "carpet.rule.fakePlayerAutoFishInterval.name": "Fake Player Auto Fish Interval",
+  "carpet.rule.fakePlayerAutoFishInterval.desc": "Modify Fake fake player to auto fish interval",
+
   "carpet.rule.fakePlayerAutoReplaceTool.name": "Fake Player Auto Replace Tool",
   "carpet.rule.fakePlayerAutoReplaceTool.desc": "Make fake player to auto replace almost damaged tool",
 

@@ -43,6 +43,12 @@ public class GcaSetting {
     )
     public static boolean fakePlayerAutoFish = false;
 
+    // 钓鱼抛竿间隔
+    @Rule(
+            categories = {GCA, EXPERIMENTAL}
+    )
+    public static  int fakePlayerAutoFishInterval = 10;
+
     // 让假人自动切换快损坏的工具
     @Rule(
             categories = {GCA, EXPERIMENTAL}

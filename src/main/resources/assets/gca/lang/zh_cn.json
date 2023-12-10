@@ -19,6 +19,9 @@
   "carpet.rule.fakePlayerAutoFish.name": "假人钓鱼",
   "carpet.rule.fakePlayerAutoFish.desc": "让假人自动钓鱼",
 
+  "carpet.rule.fakePlayerAutoFishInterval.name": "假人钓鱼间隔",
+  "carpet.rule.fakePlayerAutoFishInterval.desc": "修改假人自动钓鱼间隔",
+
   "carpet.rule.fakePlayerAutoReplaceTool.name": "假人切换工具",
   "carpet.rule.fakePlayerAutoReplaceTool.desc": "让假人自动切换快损坏的工具",
 
