@@ -56,7 +56,11 @@ public class FakePlayerResident {
         fakePlayer.addProperty("flying", flying);
         if (GcaSetting.fakePlayerReloadAction) {
             EntityPlayerActionPack ap = ((ServerPlayerInterface) player).getActionPack();
-            fakePlayer.add("actions", apToJson(ap));
+            JsonObject apJson = apToJson(ap);
+            if (GcaSetting.fakePlayerAutoFish && player.fishing != null){
+                apJson.addProperty("fishing", true);
+            }
+            fakePlayer.add("actions", apJson);
         }
         return fakePlayer;
     }
@@ -152,5 +156,7 @@ public class FakePlayerResident {
             ap.start(EntityPlayerActionPack.ActionType.USE, EntityPlayerActionPack.Action.interval(actions.get("use").getAsInt()));
         if (actions.has("jump"))
             ap.start(EntityPlayerActionPack.ActionType.JUMP, EntityPlayerActionPack.Action.interval(actions.get("jump").getAsInt()));
+        if (actions.has("fishing"))
+            ap.start(EntityPlayerActionPack.ActionType.USE, EntityPlayerActionPack.Action.once());
     }
 }
