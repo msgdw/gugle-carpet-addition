@@ -10,6 +10,7 @@ import net.minecraft.world.SimpleMenuProvider;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ChestMenu;
+import net.minecraft.world.inventory.MenuType;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -36,8 +37,12 @@ public abstract class PlayerMixin {
             SimpleMenuProvider provider = null;
             if (player.isShiftKeyDown() && GcaSetting.openFakePlayerEnderChest) {
                 provider = new SimpleMenuProvider(
-                        (i, inventory, p) -> ChestMenu.threeRows(i, inventory,
-                                fakePlayer.getEnderChestInventory()),
+                        (i, inventory, p) -> new ChestMenu(MenuType.GENERIC_9x3, i, inventory, player.getEnderChestInventory(), 3) {
+                            @Override
+                            public boolean stillValid(Player player) {
+                                return fakePlayer.isAlive();
+                            }
+                        },
                         fakePlayer.getDisplayName());
             } else if (GcaSetting.openFakePlayerInventory) {
                 provider = new SimpleMenuProvider((i, inventory, p) -> ChestMenu.sixRows(i, inventory,
