@@ -8,7 +8,6 @@
     "APAccessor",
     "AxeItemMixin",
     "CommandsMixin",
-    "DedicatedServerMixin",
     "EntityInvoker",
     "EntityPlayerMPFakeInvoker",
     "FenceGateBlockMixin",
@@ -22,6 +21,7 @@
     "SignBlockMixin"
   ],
   "server": [
+    "DedicatedServerMixin"
   ],
   "client": [
     "ServerPlayerMixin"
